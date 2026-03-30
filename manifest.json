@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Comfort Viewer - 무서운 영상도 편안하게",
+  "version": "1.1.0",
+  "description": "공포/스릴러 영상 주변에 귀여운 동물 친구들을 배치해 안정감을 줍니다.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "https://dog.ceo/*",
+    "https://cataas.com/*",
+    "https://shibe.online/*",
+    "https://loremflickr.com/*",
+    "https://some-random-api.com/*",
+    "https://randomfox.ca/*"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "commands": {
+    "toggle-comfort": {
+      "suggested_key": {
+        "default": "Alt+C"
+      },
+      "description": "컴포트 모드 켜기/끄기"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.netflix.com/*",
+        "*://*.tving.com/*",
+        "*://*.wavve.com/*",
+        "*://*.coupangplay.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

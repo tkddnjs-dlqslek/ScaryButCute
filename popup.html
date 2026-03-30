@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comfort Viewer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ffeaa7 100%);
+      color: #2d3436;
+    }
+
+    .header {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+    }
+    .header h1 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+    .header p { font-size: 11px; color: #636e72; }
+
+    .content { padding: 16px 20px; }
+
+    /* 토글 */
+    .toggle-section {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(255,255,255,0.7); border-radius: 14px;
+      padding: 14px 18px; margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .toggle-label { font-size: 15px; font-weight: 600; }
+    .toggle-hint { font-size: 10px; color: #636e72; margin-top: 2px; }
+    .toggle-switch { position: relative; width: 52px; height: 28px; cursor: pointer; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #b2bec3;
+      border-radius: 28px; transition: 0.3s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute; width: 22px; height: 22px;
+      left: 3px; bottom: 3px; background: white; border-radius: 50%;
+      transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-switch input:checked + .toggle-slider { background: #ff6b6b; }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
+
+    /* 컨트롤 그룹 */
+    .control-group {
+      background: rgba(255,255,255,0.7); border-radius: 14px;
+      padding: 14px 18px; margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .control-group label {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; font-weight: 600; margin-bottom: 10px;
+    }
+
+    /* 테마 그리드 — 4열 */
+    .theme-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
+    .theme-btn {
+      background: rgba(255,255,255,0.5); border: 2px solid transparent;
+      border-radius: 10px; padding: 8px 2px; text-align: center;
+      cursor: pointer; transition: all 0.2s; font-size: 10px;
+      line-height: 1.2;
+    }
+    .theme-btn:hover { background: rgba(255,255,255,0.9); transform: translateY(-1px); }
+    .theme-btn.active { border-color: #ff6b6b; background: rgba(255,107,107,0.1); }
+    .theme-btn .emoji { font-size: 20px; display: block; margin-bottom: 2px; }
+
+    /* 믹스 버튼 — 전폭 */
+    .theme-btn.wide { grid-column: span 4; padding: 8px 8px; font-size: 11px; }
+
+    /* GIF 토글 */
+    .gif-section {
+      background: rgba(255,255,255,0.7); border-radius: 14px;
+      padding: 12px 18px; margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .gif-info { flex: 1; }
+    .gif-label { font-size: 13px; font-weight: 600; }
+    .gif-desc { font-size: 10px; color: #636e72; margin-top: 2px; }
+    .gif-section .toggle-switch { width: 44px; height: 24px; }
+    .gif-section .toggle-slider::before {
+      width: 18px; height: 18px;
+    }
+    .gif-section .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    .status { text-align: center; font-size: 11px; color: #636e72; padding: 8px 0 4px; }
+    .status.active { color: #ff6b6b; font-weight: 600; }
+
+    .shortcut-hint {
+      text-align: center; font-size: 10px; color: #636e72;
+      padding: 0 0 8px; opacity: 0.7;
+    }
+    .shortcut-hint kbd {
+      background: rgba(255,255,255,0.8); border: 1px solid #ddd;
+      border-radius: 4px; padding: 1px 5px; font-family: inherit;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🐾 Comfort Viewer</h1>
+    <p>무서운 영상도 편안하게</p>
+  </div>
+
+  <div class="content">
+    <div class="toggle-section">
+      <div>
+        <div class="toggle-label">컴포트 모드</div>
+        <div class="toggle-hint">단축키: <kbd>Alt+C</kbd></div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="mainToggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="control-group">
+      <label>동물 친구 선택</label>
+      <div class="theme-grid">
+        <button class="theme-btn active" data-theme="koala">
+          <span class="emoji">🐨</span>코알라
+        </button>
+        <button class="theme-btn" data-theme="dog">
+          <span class="emoji">🐶</span>강아지
+        </button>
+        <button class="theme-btn" data-theme="cat">
+          <span class="emoji">🐱</span>고양이
+        </button>
+        <button class="theme-btn" data-theme="rabbit">
+          <span class="emoji">🐰</span>토끼
+        </button>
+        <button class="theme-btn" data-theme="panda">
+          <span class="emoji">🐼</span>판다
+        </button>
+        <button class="theme-btn" data-theme="fox">
+          <span class="emoji">🦊</span>여우
+        </button>
+        <button class="theme-btn" data-theme="bird">
+          <span class="emoji">🐦</span>새
+        </button>
+        <button class="theme-btn" data-theme="raccoon">
+          <span class="emoji">🦝</span>너구리
+        </button>
+        <button class="theme-btn" data-theme="red_panda">
+          <span class="emoji">🧸</span>레서판다
+        </button>
+        <button class="theme-btn" data-theme="kangaroo">
+          <span class="emoji">🦘</span>캥거루
+        </button>
+        <button class="theme-btn" data-theme="whale">
+          <span class="emoji">🐋</span>고래
+        </button>
+        <button class="theme-btn wide" data-theme="mixed">
+          <span class="emoji">🐾</span>동물 친구들 (믹스)
+        </button>
+      </div>
+    </div>
+
+    <div class="gif-section" id="gifSection">
+      <div class="gif-info">
+        <div class="gif-label">🎬 GIF 모드</div>
+        <div class="gif-desc">고양이 테마에서 움직이는 GIF 표시</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="gifToggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="status" id="statusMsg">
+      지원: YouTube · Netflix · TVING · Wavve · Coupang Play
+    </div>
+
+    <div class="shortcut-hint">
+      <kbd>Alt</kbd> + <kbd>C</kbd> 로 빠르게 켜고 끌 수 있어요
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

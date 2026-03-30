@@ -1,0 +1,50 @@
+/*
+ * Comfort Viewer - Styles v8
+ */
+
+/* ── 벽: 전체 화면 고정, 이미지가 빈틈없이 채움 ── */
+#cv-wall {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+  overflow: hidden !important;
+  background: #111 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start !important;
+  gap: 0 !important;
+}
+
+/* ── 타일: 간격 제로 ── */
+.cv-tile {
+  flex: 1 1 auto;
+  min-width: 10vw;
+  max-width: 20vw;
+  height: 14vh;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  line-height: 0 !important;
+  font-size: 0 !important;
+}
+
+.cv-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* ── 풀스크린 시 숨김 ── */
+:fullscreen #cv-wall {
+  display: none !important;
+}
