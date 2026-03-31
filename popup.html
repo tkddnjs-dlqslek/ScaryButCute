@@ -75,21 +75,7 @@
     /* 믹스 버튼 — 전폭 */
     .theme-btn.wide { grid-column: span 4; padding: 8px 8px; font-size: 11px; }
 
-    /* GIF 토글 */
-    .gif-section {
-      background: rgba(255,255,255,0.7); border-radius: 14px;
-      padding: 12px 18px; margin-bottom: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .gif-info { flex: 1; }
-    .gif-label { font-size: 13px; font-weight: 600; }
-    .gif-desc { font-size: 10px; color: #636e72; margin-top: 2px; }
-    .gif-section .toggle-switch { width: 44px; height: 24px; }
-    .gif-section .toggle-slider::before {
-      width: 18px; height: 18px;
-    }
-    .gif-section .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
 
     .status { text-align: center; font-size: 11px; color: #636e72; padding: 8px 0 4px; }
     .status.active { color: #ff6b6b; font-weight: 600; }
@@ -157,15 +143,14 @@
       </div>
     </div>
 
-    <div class="gif-section" id="gifSection">
-      <div class="gif-info">
-        <div class="gif-label">🎬 GIF 모드</div>
-        <div class="gif-desc">고양이 테마에서 움직이는 GIF 표시</div>
-      </div>
-      <label class="toggle-switch">
-        <input type="checkbox" id="gifToggle">
-        <span class="toggle-slider"></span>
+    <div class="control-group">
+      <label>
+        영상 크기
+        <span id="sizeValue" style="font-weight:400; color:#636e72;">60%</span>
       </label>
+      <input type="range" id="sizeSlider" min="30" max="90" value="60" step="5" style="
+        width:100%; cursor:pointer; accent-color:#ff6b6b; margin-top:4px;
+      ">
     </div>
 
     <div class="status" id="statusMsg">

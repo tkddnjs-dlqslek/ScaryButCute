@@ -1,28 +1,28 @@
 /**
- * Comfort Viewer - Popup Script v6
- * 새 동물 테마 + GIF 토글 + 단축키 힌트
+ * Comfort Viewer - Popup Script v7
+ * 동물 테마 + 영상 크기 조절 + 단축키 힌트
  */
 
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("mainToggle");
-  const gifToggle = document.getElementById("gifToggle");
   const themeBtns = document.querySelectorAll(".theme-btn");
   const statusMsg = document.getElementById("statusMsg");
-  const gifSection = document.getElementById("gifSection");
+  const sizeSlider = document.getElementById("sizeSlider");
+  const sizeValue = document.getElementById("sizeValue");
 
   // 저장된 상태 불러오기
-  chrome.storage.sync.get(["enabled", "animalTheme", "gifMode"], (data) => {
+  chrome.storage.sync.get(["enabled", "animalTheme", "videoSize"], (data) => {
     toggle.checked = data.enabled || false;
     updateStatus(toggle.checked);
 
-    const theme = data.animalTheme || "koala";
+    const theme = data.animalTheme || "dog";
     themeBtns.forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.theme === theme);
     });
 
-    // GIF 모드 복원
-    gifToggle.checked = data.gifMode || false;
-    updateGifSectionVisibility(theme);
+    const size = data.videoSize || 60;
+    sizeSlider.value = size;
+    sizeValue.textContent = size + "%";
   });
 
   // 메인 토글
@@ -41,27 +41,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const theme = btn.dataset.theme;
       chrome.storage.sync.set({ animalTheme: theme });
       sendToContent({ action: "setTheme", theme });
-      updateGifSectionVisibility(theme);
     });
   });
 
-  // GIF 토글
-  gifToggle.addEventListener("change", () => {
-    const gifMode = gifToggle.checked;
-    chrome.storage.sync.set({ gifMode });
-    sendToContent({ action: "setGifMode", gifMode });
+  // 영상 크기 조절
+  sizeSlider.addEventListener("input", () => {
+    const size = parseInt(sizeSlider.value);
+    sizeValue.textContent = size + "%";
+    chrome.storage.sync.set({ videoSize: size });
+    sendToContent({ action: "setSize", size });
   });
-
-  // GIF 섹션은 고양이 테마일 때만 강조 (항상 보이되, 비활성 시 흐리게)
-  function updateGifSectionVisibility(theme) {
-    if (theme === "cat") {
-      gifSection.style.opacity = "1";
-      gifSection.style.pointerEvents = "auto";
-    } else {
-      gifSection.style.opacity = "0.4";
-      gifSection.style.pointerEvents = "none";
-    }
-  }
 
   function updateStatus(enabled) {
     if (enabled) {

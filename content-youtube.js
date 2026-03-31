@@ -14,7 +14,7 @@
 
   console.log("[CV] v11 loaded");
 
-  const VIDEO_WIDTH = 60;
+  let VIDEO_WIDTH = 60;
 
   // ═══════════════════════════════════════
   //  테마별 이미지 가져오기 (전부 로컬 번들)
@@ -36,23 +36,7 @@
 
   const THEME_FETCHERS = {
     dog: async (count) => localImageUrls("dog", count),
-    cat: async (count, gifMode) => {
-      const urls = localImageUrls("cat", count);
-      if (gifMode) {
-        // 10% GIF: 로컬 이미지 중 랜덤 10%를 cataas GIF로 교체
-        const gifCount = Math.round(count * 0.1);
-        const base = Date.now();
-        const indices = Array.from({length: count}, (_, i) => i);
-        for (let i = indices.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [indices[i], indices[j]] = [indices[j], indices[i]];
-        }
-        for (let k = 0; k < gifCount; k++) {
-          urls[indices[k]] = `https://cataas.com/cat/gif?t=${base}_gif_${k}`;
-        }
-      }
-      return urls;
-    },
+    cat: async (count) => localImageUrls("cat", count),
     fox: async (count) => localImageUrls("fox", count),
     capybara: async (count) => localImageUrls("capybara", count),
     rabbit: async (count) => localImageUrls("rabbit", count),
@@ -80,7 +64,7 @@
     },
   };
 
-  let state = { enabled: false, animalTheme: "dog", gifMode: false, active: false };
+  let state = { enabled: false, animalTheme: "dog", active: false };
   let imageUrls = [];
   let prefetching = false;
   let originalParent = null;
@@ -105,7 +89,7 @@
     console.log("[CV] Prefetching:", state.animalTheme);
     try {
       const fetcher = THEME_FETCHERS[state.animalTheme] || THEME_FETCHERS.dog;
-      imageUrls = await fetcher(TILE_COUNT, state.gifMode);
+      imageUrls = await fetcher(TILE_COUNT);
       console.log("[CV] Got", imageUrls.length, "urls");
     } catch (e) {
       console.log("[CV] Prefetch error:", e.message);
@@ -381,10 +365,10 @@
   }
 
   // ── 초기화 ──
-  chrome.storage.sync.get(["enabled", "animalTheme", "gifMode"], (data) => {
+  chrome.storage.sync.get(["enabled", "animalTheme", "videoSize"], (data) => {
     console.log("[CV] Storage:", JSON.stringify(data));
     if (data.animalTheme) state.animalTheme = data.animalTheme;
-    state.gifMode = data.gifMode || false;
+    if (data.videoSize) VIDEO_WIDTH = data.videoSize;
     prefetch();
     if (data.enabled) toggle(true);
   });
@@ -401,34 +385,19 @@
       case "setTheme":
         updateTheme(msg.theme).then(() => sendResponse({ ok: true }));
         return true;
-      case "setGifMode":
-        state.gifMode = msg.gifMode;
-        if (state.animalTheme === "cat" && state.active) {
-          if (msg.gifMode) {
-            // 이미 고양이 표시 중 → 10% 타일만 GIF로 교체
-            const wall = document.getElementById("cv-wall");
-            if (wall) {
-              const tiles = wall.querySelectorAll(".cv-tile");
-              const gifCount = Math.round(tiles.length * 0.1);
-              const indices = Array.from({length: tiles.length}, (_, i) => i);
-              for (let i = indices.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [indices[i], indices[j]] = [indices[j], indices[i]];
-              }
-              const base = Date.now();
-              for (let k = 0; k < gifCount; k++) {
-                const tile = tiles[indices[k]];
-                const img = tile.querySelector("img");
-                if (img) {
-                  img.style.opacity = "0";
-                  img.src = `https://cataas.com/cat/gif?t=${base}_swap_${k}`;
-                  img.onload = () => { img.style.opacity = "1"; };
-                }
-              }
-            }
-          } else {
-            // GIF OFF → 전체 일반 고양이로 다시 생성
-            updateTheme("cat");
+      case "setSize":
+        VIDEO_WIDTH = msg.size;
+        if (state.active) {
+          // 프레임 크기 실시간 업데이트
+          const frame = document.getElementById("cv-frame");
+          if (frame) {
+            const player = document.querySelector("#movie_player");
+            const playerRect = player ? player.getBoundingClientRect() : null;
+            const aspect = playerRect ? (playerRect.width / playerRect.height) : (16/9);
+            const fh = VIDEO_WIDTH / aspect;
+            frame.style.width = VIDEO_WIDTH + "vw";
+            frame.style.height = fh + "vw";
+            forceVideoFill();
           }
         }
         sendResponse({ ok: true });
