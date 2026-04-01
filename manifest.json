@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Comfort Viewer - Watch scary videos comfortably",
+  "name": "ScaryButCute - Watch scary videos comfortably",
   "version": "1.1.0",
   "description": "Place cute animals around horror/thriller videos for visual comfort.",
   "permissions": ["storage", "activeTab"],

@@ -1,5 +1,5 @@
 /**
- * Comfort Viewer - 이미지 크롤러
+ * ScaryButCute - 이미지 크롤러
  * 매일 실행하여 로컬 번들 이미지를 새로운 사진으로 교체
  *
  * 사용법: node scripts/crawl_images.js
@@ -140,7 +140,7 @@ print(f'Resized {count} images')
 }
 
 async function main() {
-  console.log("=== Comfort Viewer Image Crawler ===");
+  console.log("=== ScaryButCute Image Crawler ===");
   console.log(`Time: ${new Date().toISOString()}`);
   console.log(`Target: ${BASE_DIR}\n`);
 

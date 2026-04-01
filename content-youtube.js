@@ -1,5 +1,5 @@
 /**
- * Comfort Viewer - Content Script v11
+ * ScaryButCute - Content Script v11
  *
  * v10 → v11 변경:
  * - YouTube JS가 video 엘리먼트 크기를 리셋하는 문제 해결:
@@ -162,6 +162,18 @@
     if (!player) return;
     console.log("[CV] Activating...");
 
+    // 새로고침 후 이전 wall 잔해 정리: player가 cv-frame 안에 있으면 먼저 복원
+    const oldWall = document.getElementById("cv-wall");
+    if (oldWall) {
+      const defaultParent = document.querySelector('ytd-player#ytd-player #container')
+          || document.querySelector('#ytd-player #container')
+          || document.querySelector('#player-container #container');
+      if (defaultParent) defaultParent.prepend(player);
+      player.removeAttribute("style");
+      oldWall.remove();
+      document.body.style.removeProperty("overflow");
+    }
+
     const playerRect = player.getBoundingClientRect();
     const playerAspect = playerRect.width / playerRect.height;
     console.log("[CV] Player:", playerRect.width.toFixed(0), "x", playerRect.height.toFixed(0), "aspect:", playerAspect.toFixed(3));
@@ -300,8 +312,11 @@
     const wall = document.getElementById("cv-wall");
     const player = document.querySelector("#movie_player");
 
-    // video/container 스타일 복원
+    // 영상 재생 상태 저장
     const video = document.querySelector("#movie_player video");
+    const wasPlaying = video && !video.paused;
+
+    // video/container 스타일 복원
     if (video) {
       video.style.removeProperty("width");
       video.style.removeProperty("height");
@@ -314,17 +329,28 @@
       container.style.removeProperty("height");
     }
 
-    if (player && originalParent) {
+    if (player) {
       if (originalPlayerStyle) {
         player.setAttribute("style", originalPlayerStyle);
       } else {
         player.removeAttribute("style");
       }
 
-      if (originalNextSibling && originalNextSibling.parentNode === originalParent) {
-        originalParent.insertBefore(player, originalNextSibling);
+      // 원래 부모가 DOM에 연결되어 있으면 그곳으로 복원
+      if (originalParent && originalParent.isConnected) {
+        if (originalNextSibling && originalNextSibling.parentNode === originalParent) {
+          originalParent.insertBefore(player, originalNextSibling);
+        } else {
+          originalParent.appendChild(player);
+        }
       } else {
-        originalParent.appendChild(player);
+        // 새로고침 후 등 원래 부모를 못 찾으면 기본 위치로 복원
+        const fallback = document.querySelector('ytd-player#ytd-player #container')
+            || document.querySelector('#ytd-player #container')
+            || document.querySelector('#player-container #container');
+        if (fallback) {
+          fallback.prepend(player);
+        }
       }
     }
 
@@ -337,6 +363,11 @@
 
     // YouTube에게 원래 크기로 되돌리라고 알림
     window.dispatchEvent(new Event("resize"));
+
+    // re-parenting 후 영상이 멈추면 다시 재생
+    if (wasPlaying && video) {
+      setTimeout(() => { if (video.paused) video.play(); }, 200);
+    }
 
     console.log("[CV] Deactivated");
   }
@@ -365,11 +396,11 @@
   }
 
   // ── 초기화 ──
-  chrome.storage.sync.get(["enabled", "animalTheme", "videoSize"], (data) => {
+  chrome.storage.sync.get(["enabled", "animalTheme", "videoSize"], async (data) => {
     console.log("[CV] Storage:", JSON.stringify(data));
     if (data.animalTheme) state.animalTheme = data.animalTheme;
     if (data.videoSize) VIDEO_WIDTH = data.videoSize;
-    prefetch();
+    await prefetch();
     if (data.enabled) toggle(true);
   });
 

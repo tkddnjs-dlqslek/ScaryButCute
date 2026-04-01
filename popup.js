@@ -1,5 +1,5 @@
 /**
- * Comfort Viewer - Popup Script v7
+ * ScaryButCute - Popup Script v7
  * 동물 테마 + 영상 크기 조절 + 단축키 힌트
  */
 

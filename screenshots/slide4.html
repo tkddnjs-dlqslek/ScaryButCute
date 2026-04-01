@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+  html, body { width: 1280px; height: 800px; overflow: hidden; font-family: 'DM Sans', sans-serif; }
+
+  .slide {
+    width: 1280px; height: 800px;
+    background: linear-gradient(145deg, #110d0a 0%, #1c1410 55%, #110d0a 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+    gap: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #cc220008, transparent 70%);
+    bottom: -200px; right: -100px;
+    pointer-events: none;
+  }
+
+  .left { flex: 1; z-index: 2; }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: #f5f3f0;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  h1 span { color: #cc2200; }
+
+  .main-text {
+    font-size: 20px;
+    color: #6a5a50;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 460px;
+  }
+
+  .info-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 20px 24px;
+    max-width: 420px;
+  }
+  .info-box-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #cc2200;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info-box-desc {
+    font-size: 14px;
+    color: #6a5a50;
+    line-height: 1.6;
+  }
+
+  .right { flex: 0 0 460px; z-index: 2; }
+
+  .calendar {
+    background: #1a1410;
+    border-radius: 20px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07);
+    overflow: hidden;
+    width: 460px;
+  }
+
+  .cal-header {
+    background: linear-gradient(135deg, #2a1c14, #1a1210);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .cal-header .month {
+    font-family: 'Fraunces', serif;
+    font-size: 24px; font-weight: 700; color: #f0ece6;
+  }
+  .cal-header .nav { color: #5a4a40; font-size: 18px; display: flex; gap: 14px; }
+
+  .cal-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 10px 12px 4px;
+    background: #161210;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .day-name {
+    text-align: center;
+    font-size: 11px; font-weight: 700;
+    color: #5a4a40;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 0;
+  }
+  .day-name.mon { color: #cc2200; }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 8px 12px 14px;
+    background: #161210;
+  }
+  .day-cell {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 500;
+    color: #5a4a40;
+    border-radius: 8px;
+  }
+  .day-cell.active { color: #8a7a70; }
+  .day-cell.monday {
+    background: #cc2200;
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 0 12px rgba(204,34,0,0.5);
+    position: relative;
+  }
+  .day-cell.today {
+    background: rgba(255,255,255,0.06);
+    color: #c4b8b0;
+    font-weight: 700;
+  }
+
+  .cal-footer {
+    padding: 13px 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    background: #1a1410;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: #5a4a40;
+  }
+  .cal-footer .dot {
+    width: 8px; height: 8px;
+    background: #cc2200;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px rgba(204,34,0,0.6);
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="bg-glow"></div>
+
+  <div class="left">
+    <h1>Fresh Animals<br><span>Every Week</span></h1>
+    <p class="main-text">New animal photos automatically updated every Monday — never see the same wall twice.</p>
+    <div class="info-box">
+      <div class="info-box-title">⚡ Powered by automated image refresh</div>
+      <div class="info-box-desc">Every Monday, a fresh batch of handpicked cute animal photos replaces the old set. Zero effort on your part.</div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="calendar">
+      <div class="cal-header">
+        <span class="month">April 2026</span>
+        <div class="nav"><span>‹</span><span>›</span></div>
+      </div>
+      <div class="cal-days-header">
+        <div class="day-name mon">MON</div>
+        <div class="day-name">TUE</div>
+        <div class="day-name">WED</div>
+        <div class="day-name">THU</div>
+        <div class="day-name">FRI</div>
+        <div class="day-name">SAT</div>
+        <div class="day-name">SUN</div>
+      </div>
+      <div class="cal-grid">
+        <div class="day-cell">30</div><div class="day-cell">31</div>
+        <div class="day-cell today">1</div><div class="day-cell active">2</div><div class="day-cell active">3</div><div class="day-cell active">4</div><div class="day-cell active">5</div>
+        <div class="day-cell monday">6</div>
+        <div class="day-cell active">7</div><div class="day-cell active">8</div><div class="day-cell active">9</div><div class="day-cell active">10</div><div class="day-cell active">11</div><div class="day-cell active">12</div>
+        <div class="day-cell monday">13</div>
+        <div class="day-cell active">14</div><div class="day-cell active">15</div><div class="day-cell active">16</div><div class="day-cell active">17</div><div class="day-cell active">18</div><div class="day-cell active">19</div>
+        <div class="day-cell monday">20</div>
+        <div class="day-cell active">21</div><div class="day-cell active">22</div><div class="day-cell active">23</div><div class="day-cell active">24</div><div class="day-cell active">25</div><div class="day-cell active">26</div>
+        <div class="day-cell monday">27</div>
+        <div class="day-cell active">28</div><div class="day-cell active">29</div><div class="day-cell active">30</div>
+      </div>
+      <div class="cal-footer">
+        <div class="dot"></div>
+        <span>Fresh photos drop every Monday automatically</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

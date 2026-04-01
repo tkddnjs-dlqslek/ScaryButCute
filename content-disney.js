@@ -1,5 +1,5 @@
 /**
- * Comfort Viewer - Disney+ Content Script
+ * ScaryButCute - Disney+ Content Script
  *
  * YouTube 코드(content-youtube.js)와 완전 분리.
  * Disney+ 플레이어는 re-parenting 하지 않고,

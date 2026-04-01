@@ -1,5 +1,5 @@
 /**
- * Comfort Viewer - Netflix Content Script
+ * ScaryButCute - Netflix Content Script
  *
  * YouTube 코드(content-youtube.js)와 완전 분리.
  * Netflix 플레이어는 re-parenting 하지 않고,

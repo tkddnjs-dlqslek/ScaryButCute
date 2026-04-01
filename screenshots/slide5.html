@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+  html, body { width: 1280px; height: 800px; overflow: hidden; font-family: 'DM Sans', sans-serif; }
+
+  .slide {
+    width: 1280px; height: 800px;
+    background: linear-gradient(145deg, #110d0a 0%, #1a1210 55%, #110d0a 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .content {
+    width: 100%;
+    z-index: 2;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 68px;
+    font-weight: 900;
+    color: #f5f3f0;
+    line-height: 1.0;
+    margin-bottom: 14px;
+  }
+  h1 span { color: #cc2200; }
+
+  .headline-sub {
+    font-size: 22px;
+    color: #6a5a50;
+    margin-bottom: 52px;
+    font-weight: 500;
+  }
+
+  .trust-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 22px 24px;
+  }
+  .trust-icon {
+    width: 48px; height: 48px;
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .trust-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #d4c8c0;
+    margin-bottom: 5px;
+  }
+  .trust-desc {
+    font-size: 14px;
+    color: #5a4a40;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="grid-bg"></div>
+  <div class="content">
+    <h1>Lightweight<br>& <span>Private</span></h1>
+    <p class="headline-sub">Your privacy matters. We don't collect anything.</p>
+    <div class="trust-items">
+      <div class="trust-item">
+        <div class="trust-icon">📦</div>
+        <div>
+          <div class="trust-title">Zero network requests</div>
+          <div class="trust-desc">All images bundled locally — only 3MB total. No external calls ever.</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔍</div>
+        <div>
+          <div class="trust-title">No data collection</div>
+          <div class="trust-desc">No analytics, no tracking, no telemetry. What you watch is your business.</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">⚡</div>
+        <div>
+          <div class="trust-title">No account required</div>
+          <div class="trust-desc">Install and go. No sign-up, no login, no email.</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">📖</div>
+        <div>
+          <div class="trust-title">Open source — MIT License</div>
+          <div class="trust-desc">Full source code available. Inspect everything, trust nothing blindly.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

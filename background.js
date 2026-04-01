@@ -1,5 +1,5 @@
 /**
- * Comfort Viewer - Background Service Worker
+ * ScaryButCute - Background Service Worker
  * Alt+C 단축키 처리
  */
 
